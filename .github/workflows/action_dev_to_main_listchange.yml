@@ -18,3 +18,19 @@ jobs:
         run: |
           echo "Archivos modificados en el merge develop -> main:"
           git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: List changed files only
+        run: |
+          echo "Archivos modificados en el merge develop -> main: ONLY"
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Extract distinct projects
+        id: extract
+        run: |
+          PROJECTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
+            | grep '^databricks_dub/projects/' \
+            | cut -d'/' -f3 \
+            | sort -u \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "Proyectos detectados: $PROJECTS"
+          echo "projects=$PROJECTS" >> "$GITHUB_OUTPUT"
