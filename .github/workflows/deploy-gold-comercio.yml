@@ -1,0 +1,31 @@
+name: Deploy Gold Comercio
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/gold_comercio/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/gold_comercio
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle
+        run: databricks bundle validate -t dev
+        env:
+          DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+      - name: Deploy bundle
+        run: databricks bundle deploy -t dev
+        env:
+          DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
