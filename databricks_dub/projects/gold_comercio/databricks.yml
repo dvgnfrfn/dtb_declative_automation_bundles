@@ -9,7 +9,7 @@ variables:
     default: main
 
 targets:
-  prod:
+  dev:
     mode: development
     default: true
     workspace:
