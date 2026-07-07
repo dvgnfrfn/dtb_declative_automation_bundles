@@ -3,7 +3,11 @@ name: Deploy Declarative Automation Bundles
 on:
   workflow_dispatch:
     inputs:
-      prm_enviroment:   { type: string, required: true }
+      prm_enviroment: {
+        type: choice,
+        required: true,
+        options: [dev, prod], default: 'dev',
+      }
       prm_project_path: { type: string, required: true }
 
   workflow_call:
