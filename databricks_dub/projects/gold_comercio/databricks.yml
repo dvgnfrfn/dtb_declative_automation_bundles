@@ -13,6 +13,6 @@ targets:
     mode: development
     default: true
     workspace:
-      host: ${{ variables.DATABRICKS_HOST }}
+      host: ${{ vars.DATABRICKS_HOST }}
     variables:
       git_branch: main
