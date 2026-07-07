@@ -1,7 +1,7 @@
 resources:
   jobs:
     workflow_gold_sch_comercio:
-      name: workflow_gold_sch_comercio_2
+      name: workflow_gold_sch_comercio
       tasks:
         - task_key: launch
           notebook_task:

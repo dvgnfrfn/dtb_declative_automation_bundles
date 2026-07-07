@@ -1,5 +1,5 @@
 bundle:
-  name: gold_comercio_2
+  name: gold_comercio_4
 
 include:
   - resources/*.yml
