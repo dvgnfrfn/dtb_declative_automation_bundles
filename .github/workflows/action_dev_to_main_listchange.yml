@@ -27,10 +27,11 @@ jobs:
       - name: Extract distinct projects
         id: extract
         run: |
-          PROJECTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
-            | grep '^databricks_dab/projects/' \
-            | cut -d'/' -f3 \
-            | sort -u \
-            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          PROJECTS = $(
+                        git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
+                          | grep '^${{ vars.DABUNDLE_PATH }}' \
+                          | cut -d'/' -f1-3 \
+                          | sort -u
+                      )
           echo "Proyectos detectados: $PROJECTS"
           echo "projects=$PROJECTS" >> "$GITHUB_OUTPUT"
