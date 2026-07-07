@@ -28,7 +28,7 @@ jobs:
         id: extract
         run: |
           PROJECTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
-            | grep '^databricks_dub/projects/' \
+            | grep '^databricks_dab/projects/' \
             | cut -d'/' -f3 \
             | sort -u \
             | jq -R -s -c 'split("\n") | map(select(length > 0))')
