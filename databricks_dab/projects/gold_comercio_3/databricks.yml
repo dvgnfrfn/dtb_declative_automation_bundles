@@ -1,0 +1,16 @@
+bundle:
+  name: gold_comercio_3
+
+include:
+  - resources/*.yml
+
+variables:
+  git_branch:
+    default: main
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      git_branch: main
