@@ -6,9 +6,11 @@ on:
     branches: [main]
 
 jobs:
-  list-files:
+  list-projects:
     if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
     runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.extract.outputs.projects }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -19,18 +21,26 @@ jobs:
           echo "Archivos modificados en el merge develop -> main:"
           git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
 
-      - name: List changed files only
-        run: |
-          echo "Archivos modificados en el merge develop -> main: ONLY"
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
-
       - name: Extract distinct projects
         id: extract
         run: |
           PROJECTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
                           | grep '^${{ vars.DABUNDLE_PATH }}' \
                           | cut -d'/' -f1-3 \
-                          | sort -u
-                      )
+                          | sort -u \
+                          | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "Proyectos detectados: $PROJECTS"
           echo "projects=$PROJECTS" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: list-projects
+    if: needs.list-projects.outputs.projects != '[]'
+    strategy:
+      matrix:
+        project_path: ${{ fromJson(needs.list-projects.outputs.projects) }}
+      fail-fast: false
+    uses: ./.github/workflows/_deploy_DABundle.yml
+    with:
+      prm_enviroment: dev
+      prm_project_path: ${{ matrix.project_path }}
+    secrets: inherit
