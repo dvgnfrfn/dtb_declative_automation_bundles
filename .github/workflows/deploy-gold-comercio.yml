@@ -2,14 +2,6 @@ name: Deploy Gold Comercio
 
 on:
   workflow_dispatch:
-    inputs:
-      target:
-        description: 'Target de despliegue'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
 
 jobs:
   deploy:
