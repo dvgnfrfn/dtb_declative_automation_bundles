@@ -12,7 +12,5 @@ targets:
   dev:
     mode: development
     default: true
-    workspace:
-      host: ${{ vars.DATABRICKS_HOST }}
     variables:
       git_branch: main
