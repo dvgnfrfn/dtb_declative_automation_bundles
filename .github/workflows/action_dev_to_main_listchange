@@ -1,0 +1,20 @@
+name: List Changed Files on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  list-files:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: List changed files
+        run: |
+          echo "Archivos modificados en el merge develop -> main:"
+          git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
