@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: projects/gold_comercio
+        working-directory: databricks_dub/projects/gold_comercio
     steps:
       - uses: actions/checkout@v4
 
