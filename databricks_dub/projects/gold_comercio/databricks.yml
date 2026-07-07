@@ -1,0 +1,18 @@
+bundle:
+  name: gold_comercio
+
+include:
+  - resources/*.yml
+
+variables:
+  git_branch:
+    default: main
+
+targets:
+  prod:
+    mode: development
+    default: true
+    workspace:
+      host: ${{ variables.DATABRICKS_HOST }}
+    variables:
+      git_branch: main
