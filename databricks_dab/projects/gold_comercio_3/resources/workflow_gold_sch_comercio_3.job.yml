@@ -1,6 +1,6 @@
 resources:
   jobs:
-    workflow_gold_sch_comercio:
+    workflow_gold_sch_comercio_3:
       name: workflow_gold_sch_comercio_3
       tasks:
         - task_key: launch
