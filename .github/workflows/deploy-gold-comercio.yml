@@ -16,13 +16,13 @@ jobs:
         uses: databricks/setup-cli@main
 
       - name: Validate bundle
-        run: databricks bundle validate -t ${{ inputs.target || 'dev' }}
+        run: databricks bundle validate -t 'dev'
         env:
           DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       - name: Deploy bundle
-        run: databricks bundle deploy -t ${{ inputs.target || 'dev' }}
+        run: databricks bundle deploy -t 'dev'
         env:
           DATABRICKS_HOST: ${{ vars.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
