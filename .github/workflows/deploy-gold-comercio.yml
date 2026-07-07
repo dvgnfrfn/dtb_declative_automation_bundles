@@ -1,10 +1,6 @@
 name: Deploy Gold Comercio
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '/databricks_dub/projects/gold_comercio/**'
   workflow_dispatch:
     inputs:
       target:
