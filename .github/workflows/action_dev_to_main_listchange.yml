@@ -1,0 +1,36 @@
+name: List Changed Files on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  list-files:
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: List changed files
+        run: |
+          echo "Archivos modificados en el merge develop -> main:"
+          git diff --name-status ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: List changed files only
+        run: |
+          echo "Archivos modificados en el merge develop -> main: ONLY"
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Extract distinct projects
+        id: extract
+        run: |
+          PROJECTS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.merge_commit_sha }} \
+            | grep '^databricks_dab/projects/' \
+            | cut -d'/' -f3 \
+            | sort -u \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "Proyectos detectados: $PROJECTS"
+          echo "projects=$PROJECTS" >> "$GITHUB_OUTPUT"
